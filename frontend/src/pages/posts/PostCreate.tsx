@@ -20,8 +20,9 @@ import {
 } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import ja from 'date-fns/locale/ja';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/ja';
+import dayjs, { Dayjs } from 'dayjs';
 import { Save as SaveIcon, Delete as DeleteIcon, ArrowBack as ArrowBackIcon, Publish as PublishIcon } from '@mui/icons-material';
 import { postsApi, Post, CreatePostDto, UpdatePostDto, PostType } from '../../api/posts.api';
 import { storesApi, Store } from '../../api/stores.api';
@@ -46,7 +47,7 @@ export const PostCreate: React.FC = () => {
     image_url: '',
     status: 'draft'
   });
-  const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
+  const [scheduledAt, setScheduledAt] = useState<Dayjs | null>(null);
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(!isNewPost);
   const [saving, setSaving] = useState(false);
@@ -155,7 +156,7 @@ export const PostCreate: React.FC = () => {
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">
       <Box sx={{ p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
