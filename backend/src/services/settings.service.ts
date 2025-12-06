@@ -1,4 +1,4 @@
-import { prisma } from '../repositories/prisma.js';
+import { prisma } from '../repositories/prisma';
 import { Prisma } from '@prisma/client';
 
 interface GetSettingsParams {

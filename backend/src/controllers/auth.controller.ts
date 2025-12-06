@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { loginSchema } from '../validators/auth.validator.js';
-import { authService } from '../services/auth.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { loginSchema } from '../validators/auth.validator';
+import { authService } from '../services/auth.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function login(req: Request, res: Response) {
   try {

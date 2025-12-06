@@ -1,8 +1,8 @@
 import { Job } from 'bull';
-import { MetricsFetchJobData } from '../queues.js';
-import { prisma } from '../../repositories/prisma.js';
-import { gbpService } from '../../integrations/index.js';
-import { logger } from '../../utils/logger.js';
+import { MetricsFetchJobData } from '../queues';
+import { prisma } from '../../repositories/prisma';
+import { gbpService } from '../../integrations/index';
+import { logger } from '../../utils/logger';
 
 export async function processMetricsFetch(job: Job<MetricsFetchJobData>) {
   const { storeId, date } = job.data;

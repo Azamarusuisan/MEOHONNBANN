@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { authRouter } from './auth.routes.js';
-import { customersRouter } from './customers.routes.js';
-import { storesRouter } from './stores.routes.js';
-import { postsRouter } from './posts.routes.js';
-import { schedulesRouter } from './schedules.routes.js';
-import { metricsRouter } from './metrics.routes.js';
-import { settingsRouter } from './settings.routes.js';
+import { authRouter } from './auth.routes';
+import { customersRouter } from './customers.routes';
+import { storesRouter } from './stores.routes';
+import { postsRouter } from './posts.routes';
+import { schedulesRouter } from './schedules.routes';
+import { metricsRouter } from './metrics.routes';
+import { settingsRouter } from './settings.routes';
 
 export const router = Router();
 

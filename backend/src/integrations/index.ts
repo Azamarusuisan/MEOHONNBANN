@@ -1,8 +1,8 @@
-import { config } from '../config/index.js';
-import { IGbpService } from './gbp/gbp.interface.js';
-import { GbpMockService } from './gbp/gbp-mock.service.js';
-import { ILineNotificationService } from './line/line.interface.js';
-import { LineMockService } from './line/line-mock.service.js';
+import { config } from '../config/index';
+import { IGbpService } from './gbp/gbp.interface';
+import { GbpMockService } from './gbp/gbp-mock.service';
+import { ILineNotificationService } from './line/line.interface';
+import { LineMockService } from './line/line-mock.service';
 
 export function createGbpService(): IGbpService {
   if (config.USE_MOCK_SERVICES) {

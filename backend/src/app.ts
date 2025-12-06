@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { requestLogger } from './middlewares/logger.middleware.js';
-import { errorMiddleware } from './middlewares/error.middleware.js';
-import { router } from './routes/index.js';
+import { requestLogger } from './middlewares/logger.middleware';
+import { errorMiddleware } from './middlewares/error.middleware';
+import { router } from './routes/index';
 
 const app = express();
 

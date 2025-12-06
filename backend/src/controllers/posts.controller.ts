@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createPostSchema, updatePostSchema } from '../validators/post.validator.js';
-import { postsService } from '../services/posts.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { createPostSchema, updatePostSchema } from '../validators/post.validator';
+import { postsService } from '../services/posts.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function getPosts(req: Request, res: Response) {
   try {

@@ -5,8 +5,8 @@ import {
   createSchedule,
   updateSchedule,
   deleteSchedule
-} from '../controllers/schedules.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+} from '../controllers/schedules.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 export const schedulesRouter = Router();
 

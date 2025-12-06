@@ -1,5 +1,5 @@
-import { IGbpService, GbpPostData, GbpPostResult, GbpMetrics } from './gbp.interface.js';
-import { logger } from '../../utils/logger.js';
+import { IGbpService, GbpPostData, GbpPostResult, GbpMetrics } from './gbp.interface';
+import { logger } from '../../utils/logger';
 
 export class GbpMockService implements IGbpService {
   async createPost(locationId: string, data: GbpPostData): Promise<GbpPostResult> {

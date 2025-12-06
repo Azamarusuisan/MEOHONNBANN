@@ -1,8 +1,8 @@
 import { Job } from 'bull';
-import { LineNotifyJobData } from '../queues.js';
-import { prisma } from '../../repositories/prisma.js';
-import { lineService } from '../../integrations/index.js';
-import { logger } from '../../utils/logger.js';
+import { LineNotifyJobData } from '../queues';
+import { prisma } from '../../repositories/prisma';
+import { lineService } from '../../integrations/index';
+import { logger } from '../../utils/logger';
 
 export async function processLineNotify(job: Job<LineNotifyJobData>) {
   const { lineAccountId, templateType, recipientId, variables } = job.data;

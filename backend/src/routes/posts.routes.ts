@@ -5,8 +5,8 @@ import {
   createPost,
   updatePost,
   deletePost
-} from '../controllers/posts.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+} from '../controllers/posts.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 export const postsRouter = Router();
 

@@ -5,8 +5,8 @@ import {
   createSetting,
   updateSetting,
   deleteSetting
-} from '../controllers/settings.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+} from '../controllers/settings.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 export const settingsRouter = Router();
 

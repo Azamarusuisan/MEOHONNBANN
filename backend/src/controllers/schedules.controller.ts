@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createScheduleSchema, updateScheduleSchema } from '../validators/schedule.validator.js';
-import { schedulesService } from '../services/schedules.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { createScheduleSchema, updateScheduleSchema } from '../validators/schedule.validator';
+import { schedulesService } from '../services/schedules.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function getSchedules(req: Request, res: Response) {
   try {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createSettingSchema, updateSettingSchema } from '../validators/setting.validator.js';
-import { settingsService } from '../services/settings.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { createSettingSchema, updateSettingSchema } from '../validators/setting.validator';
+import { settingsService } from '../services/settings.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function getSettings(req: Request, res: Response) {
   try {

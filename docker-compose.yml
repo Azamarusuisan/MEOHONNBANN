@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   db:
@@ -35,16 +33,15 @@ services:
 
   # Backend API Server
   api:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: node:18-bullseye-slim
     container_name: gbp-api
+    working_dir: /app
     ports:
       - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/gbpdb
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key}
+      - JWT_SECRET=your-super-secret-jwt-key
       - USE_MOCK_SERVICES=true
       - NODE_ENV=development
     depends_on:
@@ -53,16 +50,15 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend/src:/app/src
-      - ./backend/prisma:/app/prisma
-    command: npm run dev
+      - ./backend:/app
+      - api_node_modules:/app/node_modules
+    command: sh -c "npm install && npx prisma generate && npm run dev"
 
   # Frontend Development Server
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: node:20-bullseye-slim
     container_name: gbp-frontend
+    working_dir: /app
     ports:
       - "5173:5173"
     environment:
@@ -70,10 +66,12 @@ services:
     depends_on:
       - api
     volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-    command: npm run dev
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    command: sh -c "rm -f package-lock.json && npm install && npm run dev"
 
 volumes:
   postgres_data:
   redis_data:
+  api_node_modules:
+  frontend_node_modules:

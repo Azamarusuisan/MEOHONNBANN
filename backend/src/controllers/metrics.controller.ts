@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createMetricSchema, updateMetricSchema } from '../validators/metric.validator.js';
-import { metricsService } from '../services/metrics.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { createMetricSchema, updateMetricSchema } from '../validators/metric.validator';
+import { metricsService } from '../services/metrics.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function getMetrics(req: Request, res: Response) {
   try {

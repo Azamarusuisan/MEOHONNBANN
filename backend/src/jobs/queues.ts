@@ -1,5 +1,5 @@
 import Bull from 'bull';
-import { config } from '../config/index.js';
+import { config } from '../config/index';
 
 // Queue definitions
 export const postPublishQueue = new Bull('post-publish', config.REDIS_URL, {

@@ -1,8 +1,8 @@
-import { postPublishQueue, metricsFetchQueue, lineNotifyQueue } from './queues.js';
-import { processPostPublish } from './processors/post-publish.processor.js';
-import { processMetricsFetch } from './processors/metrics-fetch.processor.js';
-import { processLineNotify } from './processors/line-notify.processor.js';
-import { logger } from '../utils/logger.js';
+import { postPublishQueue, metricsFetchQueue, lineNotifyQueue } from './queues';
+import { processPostPublish } from './processors/post-publish.processor';
+import { processMetricsFetch } from './processors/metrics-fetch.processor';
+import { processLineNotify } from './processors/line-notify.processor';
+import { logger } from '../utils/logger';
 
 export function initializeJobProcessors() {
   logger.info('Initializing job processors...');

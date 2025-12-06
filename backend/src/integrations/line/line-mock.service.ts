@@ -1,5 +1,5 @@
-import { ILineNotificationService, LineMessage, LineNotifyResult } from './line.interface.js';
-import { logger } from '../../utils/logger.js';
+import { ILineNotificationService, LineMessage, LineNotifyResult } from './line.interface';
+import { logger } from '../../utils/logger';
 
 export class LineMockService implements ILineNotificationService {
   async sendNotification(

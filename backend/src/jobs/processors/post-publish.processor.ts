@@ -1,8 +1,8 @@
 import { Job } from 'bull';
-import { PostPublishJobData, lineNotifyQueue } from '../queues.js';
-import { prisma } from '../../repositories/prisma.js';
-import { gbpService } from '../../integrations/index.js';
-import { logger } from '../../utils/logger.js';
+import { PostPublishJobData, lineNotifyQueue } from '../queues';
+import { prisma } from '../../repositories/prisma';
+import { gbpService } from '../../integrations/index';
+import { logger } from '../../utils/logger';
 
 export async function processPostPublish(job: Job<PostPublishJobData>) {
   const { scheduleId, postId, storeId } = job.data;

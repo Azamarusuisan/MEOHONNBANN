@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createStoreSchema, updateStoreSchema } from '../validators/store.validator.js';
-import { storesService } from '../services/stores.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { createStoreSchema, updateStoreSchema } from '../validators/store.validator';
+import { storesService } from '../services/stores.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function getStores(req: Request, res: Response) {
   try {

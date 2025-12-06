@@ -5,8 +5,8 @@ import {
   createMetric,
   updateMetric,
   deleteMetric
-} from '../controllers/metrics.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+} from '../controllers/metrics.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 export const metricsRouter = Router();
 

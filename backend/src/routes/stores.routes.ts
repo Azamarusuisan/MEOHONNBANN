@@ -5,8 +5,8 @@ import {
   createStore,
   updateStore,
   deleteStore
-} from '../controllers/stores.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+} from '../controllers/stores.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 export const storesRouter = Router();
 

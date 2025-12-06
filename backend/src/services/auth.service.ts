@@ -1,6 +1,6 @@
-import { prisma } from '../repositories/prisma.js';
-import { comparePassword } from '../auth/password.js';
-import { generateToken } from '../auth/jwt.js';
+import { prisma } from '../repositories/prisma';
+import { comparePassword } from '../auth/password';
+import { generateToken } from '../auth/jwt';
 
 export const authService = {
   async login(email: string, password: string) {

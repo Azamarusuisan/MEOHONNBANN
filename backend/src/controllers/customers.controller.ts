@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { createCustomerSchema, updateCustomerSchema } from '../validators/customer.validator.js';
-import { customersService } from '../services/customers.service.js';
-import { sendSuccess, sendError } from '../utils/response.js';
+import { createCustomerSchema, updateCustomerSchema } from '../validators/customer.validator';
+import { customersService } from '../services/customers.service';
+import { sendSuccess, sendError } from '../utils/response';
 
 export async function getCustomers(req: Request, res: Response) {
   try {
