@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================
+// 社内ユーザー
+// ===========================================
+model StaffUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("staff_users")
+}
+
+// ===========================================
+// 顧客マスター
+// ===========================================
+model Customer {
+  id          String   @id @default(uuid())
+  name        String
+  companyName String?  @map("company_name")
+  email       String?
+  phone       String?
+  notes       String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  stores Store[]
+
+  @@map("customers")
+}
+
+// ===========================================
+// 店舗情報
+// ===========================================
+model Store {
+  id            String   @id @default(uuid())
+  customerId    String   @map("customer_id")
+  name          String
+  address       String?
+  phone         String?
+  gbpLocationId String?  @map("gbp_location_id")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  customer      Customer         @relation(fields: [customerId], references: [id])
+  gbpAuth       StoreGbpAuth?
+  postSchedules PostSchedule[]
+  dailyMetrics  GbpDailyMetric[]
+
+  @@map("stores")
+}
+
+// ===========================================
+// 店舗GBP認証情報
+// ===========================================
+model StoreGbpAuth {
+  id           String    @id @default(uuid())
+  storeId      String    @unique @map("store_id")
+  accessToken  String?   @map("access_token")
+  refreshToken String?   @map("refresh_token")
+  tokenExpiry  DateTime? @map("token_expiry")
+  isConnected  Boolean   @default(false) @map("is_connected")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  store Store @relation(fields: [storeId], references: [id])
+
+  @@map("store_gbp_auth")
+}
+
+// ===========================================
+// 投稿マスター
+// ===========================================
+model Post {
+  id         String    @id @default(uuid())
+  title      String?
+  content    String
+  postType   PostType  @default(NEWS) @map("post_type")
+  imageUrl   String?   @map("image_url")
+  ctaType    String?   @map("cta_type")
+  ctaUrl     String?   @map("cta_url")
+  eventStart DateTime? @map("event_start")
+  eventEnd   DateTime? @map("event_end")
+  isActive   Boolean   @default(true) @map("is_active")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  schedules PostSchedule[]
+
+  @@map("posts")
+}
+
+enum PostType {
+  NEWS
+  EVENT
+  OFFER
+  PRODUCT
+}
+
+// ===========================================
+// 予約スケジュール
+// ===========================================
+model PostSchedule {
+  id           String         @id @default(uuid())
+  postId       String         @map("post_id")
+  storeId      String         @map("store_id")
+  scheduledAt  DateTime       @map("scheduled_at")
+  status       ScheduleStatus @default(PENDING)
+  executedAt   DateTime?      @map("executed_at")
+  gbpPostId    String?        @map("gbp_post_id")
+  errorMessage String?        @map("error_message")
+  retryCount   Int            @default(0) @map("retry_count")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  post  Post  @relation(fields: [postId], references: [id])
+  store Store @relation(fields: [storeId], references: [id])
+
+  @@map("post_schedules")
+}
+
+enum ScheduleStatus {
+  PENDING
+  QUEUED
+  PROCESSING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+// ===========================================
+// LINEアカウント
+// ===========================================
+model LineAccount {
+  id            String   @id @default(uuid())
+  name          String
+  channelId     String?  @map("channel_id")
+  channelSecret String?  @map("channel_secret")
+  accessToken   String?  @map("access_token")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  notifications LineNotification[]
+
+  @@map("line_accounts")
+}
+
+// ===========================================
+// LINE通知ログ
+// ===========================================
+model LineNotification {
+  id            String               @id @default(uuid())
+  lineAccountId String               @map("line_account_id")
+  templateType  NotificationTemplate @map("template_type")
+  recipientId   String?              @map("recipient_id")
+  message       String
+  status        NotificationStatus   @default(PENDING)
+  sentAt        DateTime?            @map("sent_at")
+  errorMessage  String?              @map("error_message")
+  createdAt     DateTime             @default(now()) @map("created_at")
+
+  lineAccount LineAccount @relation(fields: [lineAccountId], references: [id])
+
+  @@map("line_notifications")
+}
+
+enum NotificationTemplate {
+  POST_SUCCESS
+  POST_FAILURE
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// ===========================================
+// GBP日次メトリクス
+// ===========================================
+model GbpDailyMetric {
+  id              String   @id @default(uuid())
+  storeId         String   @map("store_id")
+  date            DateTime @db.Date
+  viewCount       Int      @default(0) @map("view_count")
+  searchCount     Int      @default(0) @map("search_count")
+  phoneClicks     Int      @default(0) @map("phone_clicks")
+  directionClicks Int      @default(0) @map("direction_clicks")
+  websiteClicks   Int      @default(0) @map("website_clicks")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  store Store @relation(fields: [storeId], references: [id])
+
+  @@unique([storeId, date])
+  @@map("gbp_daily_metrics")
+}
+
+// ===========================================
+// 設定テーブル
+// ===========================================
+model Setting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
