@@ -18,14 +18,14 @@ export const customersService = {
     if (search) {
       where.OR = [
         { name: { contains: search } },
-        { lineUserId: { contains: search } },
+        { companyName: { contains: search } },
         { email: { contains: search } },
         { phone: { contains: search } },
       ];
     }
 
     if (storeId) {
-      where.storeId = storeId;
+      where.stores = { some: { id: storeId } };
     }
 
     const [customers, total] = await Promise.all([
@@ -35,7 +35,7 @@ export const customersService = {
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          store: { select: { id: true, name: true } },
+          stores: { select: { id: true, name: true } },
         },
       }),
       prisma.customer.count({ where }),
@@ -56,11 +56,7 @@ export const customersService = {
     return prisma.customer.findUnique({
       where: { id },
       include: {
-        store: { select: { id: true, name: true } },
-        interactions: {
-          orderBy: { interactedAt: 'desc' },
-          take: 10,
-        },
+        stores: { select: { id: true, name: true } },
       },
     });
   },
@@ -69,7 +65,7 @@ export const customersService = {
     return prisma.customer.create({
       data,
       include: {
-        store: { select: { id: true, name: true } },
+        stores: { select: { id: true, name: true } },
       },
     });
   },
@@ -80,7 +76,7 @@ export const customersService = {
         where: { id },
         data,
         include: {
-          store: { select: { id: true, name: true } },
+          stores: { select: { id: true, name: true } },
         },
       });
     } catch (error) {

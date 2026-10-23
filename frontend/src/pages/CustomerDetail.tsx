@@ -11,7 +11,7 @@ import {
   CardContent,
 } from '@mui/material'
 import { ArrowBack, Store } from '@mui/icons-material'
-import api from '../utils/api'
+import api from '../api/client'
 
 interface Customer {
   id: string

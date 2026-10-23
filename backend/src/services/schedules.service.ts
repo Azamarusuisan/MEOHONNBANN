@@ -14,7 +14,7 @@ export const schedulesService = {
     const { page, limit, storeId, startDate, endDate } = params;
     const skip = (page - 1) * limit;
 
-    const where: Prisma.PostingScheduleWhereInput = {};
+    const where: Prisma.PostScheduleWhereInput = {};
 
     if (storeId) {
       where.storeId = storeId;
@@ -31,16 +31,17 @@ export const schedulesService = {
     }
 
     const [schedules, total] = await Promise.all([
-      prisma.postingSchedule.findMany({
+      prisma.postSchedule.findMany({
         where,
         skip,
         take: limit,
         orderBy: { scheduledAt: 'asc' },
         include: {
           store: { select: { id: true, name: true } },
+          post: true,
         },
       }),
-      prisma.postingSchedule.count({ where }),
+      prisma.postSchedule.count({ where }),
     ]);
 
     return {
@@ -55,30 +56,33 @@ export const schedulesService = {
   },
 
   async getSchedule(id: string) {
-    return prisma.postingSchedule.findUnique({
+    return prisma.postSchedule.findUnique({
       where: { id },
       include: {
         store: { select: { id: true, name: true } },
+          post: true,
       },
     });
   },
 
-  async createSchedule(data: Prisma.PostingScheduleCreateInput) {
-    return prisma.postingSchedule.create({
+  async createSchedule(data: Prisma.PostScheduleUncheckedCreateInput) {
+    return prisma.postSchedule.create({
       data,
       include: {
         store: { select: { id: true, name: true } },
+          post: true,
       },
     });
   },
 
-  async updateSchedule(id: string, data: Prisma.PostingScheduleUpdateInput) {
+  async updateSchedule(id: string, data: Prisma.PostScheduleUpdateInput) {
     try {
-      return await prisma.postingSchedule.update({
+      return await prisma.postSchedule.update({
         where: { id },
         data,
         include: {
           store: { select: { id: true, name: true } },
+          post: true,
         },
       });
     } catch (error) {
@@ -91,7 +95,7 @@ export const schedulesService = {
 
   async deleteSchedule(id: string) {
     try {
-      await prisma.postingSchedule.delete({ where: { id } });
+      await prisma.postSchedule.delete({ where: { id } });
       return true;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

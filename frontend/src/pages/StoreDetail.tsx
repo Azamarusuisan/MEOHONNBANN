@@ -9,7 +9,7 @@ import {
   Chip,
 } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
-import api from '../utils/api'
+import api from '../api/client'
 
 interface Store {
   id: string

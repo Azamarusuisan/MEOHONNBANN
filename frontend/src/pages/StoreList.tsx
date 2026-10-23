@@ -23,7 +23,7 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Add, Edit, Delete, Visibility } from '@mui/icons-material'
-import api from '../utils/api'
+import api from '../api/client'
 
 interface Store {
   id: string
@@ -60,8 +60,8 @@ export default function StoreList() {
         api.get('/stores'),
         api.get('/customers'),
       ])
-      setStores(storesRes.data.data || [])
-      setCustomers(customersRes.data.data || [])
+      setStores(storesRes.data.data.data || [])
+      setCustomers(customersRes.data.data.data || [])
     } catch (error) {
       console.error('Failed to fetch data:', error)
     } finally {

@@ -5,11 +5,14 @@ import { sendSuccess, sendError } from '../utils/response';
 
 export async function getSettings(req: Request, res: Response) {
   try {
-    const { page = '1', limit = '10', storeId } = req.query;
+    const { page = '1', limit = '10' } = req.query;
+    if (req.query.storeId !== undefined) {
+      sendError(res, 'VALIDATION_ERROR', '設定は店舗単位ではありません', 400);
+      return;
+    }
     const settings = await settingsService.getSettings({
       page: parseInt(page as string),
       limit: parseInt(limit as string),
-      storeId: storeId as string,
     });
     sendSuccess(res, settings);
   } catch (error) {

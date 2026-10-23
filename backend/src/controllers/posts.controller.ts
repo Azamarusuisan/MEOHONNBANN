@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { scheduleStatusEnum } from '../validators/schedule.validator';
 import { createPostSchema, updatePostSchema } from '../validators/post.validator';
 import { postsService } from '../services/posts.service';
 import { sendSuccess, sendError } from '../utils/response';
@@ -6,11 +7,16 @@ import { sendSuccess, sendError } from '../utils/response';
 export async function getPosts(req: Request, res: Response) {
   try {
     const { page = '1', limit = '10', storeId, status } = req.query;
+    const parsedStatus = scheduleStatusEnum.optional().safeParse(status);
+    if (!parsedStatus.success) {
+      sendError(res, 'VALIDATION_ERROR', '投稿ステータスが正しくありません', 400);
+      return;
+    }
     const posts = await postsService.getPosts({
       page: parseInt(page as string),
       limit: parseInt(limit as string),
       storeId: storeId as string,
-      status: status as string,
+      status: parsedStatus.data,
     });
     sendSuccess(res, posts);
   } catch (error) {

@@ -1,11 +1,11 @@
 import { prisma } from '../repositories/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma, ScheduleStatus } from '@prisma/client';
 
 interface GetPostsParams {
   page: number;
   limit: number;
   storeId?: string;
-  status?: string;
+  status?: ScheduleStatus;
 }
 
 export const postsService = {
@@ -13,27 +13,23 @@ export const postsService = {
     const { page, limit, storeId, status } = params;
     const skip = (page - 1) * limit;
 
-    const where: Prisma.GbpPostWhereInput = {};
+    const where: Prisma.PostWhereInput = {};
 
-    if (storeId) {
-      where.storeId = storeId;
-    }
-
-    if (status) {
-      where.status = status;
+    if (storeId || status) {
+      where.schedules = { some: { storeId, status } };
     }
 
     const [posts, total] = await Promise.all([
-      prisma.gbpPost.findMany({
+      prisma.post.findMany({
         where,
         skip,
         take: limit,
-        orderBy: { scheduledAt: 'desc' },
+        orderBy: { createdAt: 'desc' },
         include: {
-          store: { select: { id: true, name: true } },
+          schedules: { include: { store: { select: { id: true, name: true } } } },
         },
       }),
-      prisma.gbpPost.count({ where }),
+      prisma.post.count({ where }),
     ]);
 
     return {
@@ -48,30 +44,30 @@ export const postsService = {
   },
 
   async getPost(id: string) {
-    return prisma.gbpPost.findUnique({
+    return prisma.post.findUnique({
       where: { id },
       include: {
-        store: { select: { id: true, name: true } },
+        schedules: { include: { store: { select: { id: true, name: true } } } },
       },
     });
   },
 
-  async createPost(data: Prisma.GbpPostCreateInput) {
-    return prisma.gbpPost.create({
+  async createPost(data: Prisma.PostCreateInput) {
+    return prisma.post.create({
       data,
       include: {
-        store: { select: { id: true, name: true } },
+        schedules: { include: { store: { select: { id: true, name: true } } } },
       },
     });
   },
 
-  async updatePost(id: string, data: Prisma.GbpPostUpdateInput) {
+  async updatePost(id: string, data: Prisma.PostUpdateInput) {
     try {
-      return await prisma.gbpPost.update({
+      return await prisma.post.update({
         where: { id },
         data,
         include: {
-          store: { select: { id: true, name: true } },
+          schedules: { include: { store: { select: { id: true, name: true } } } },
         },
       });
     } catch (error) {
@@ -84,7 +80,7 @@ export const postsService = {
 
   async deletePost(id: string) {
     try {
-      await prisma.gbpPost.delete({ where: { id } });
+      await prisma.post.delete({ where: { id } });
       return true;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

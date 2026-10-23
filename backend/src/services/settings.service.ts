@@ -4,31 +4,23 @@ import { Prisma } from '@prisma/client';
 interface GetSettingsParams {
   page: number;
   limit: number;
-  storeId?: string;
 }
 
 export const settingsService = {
   async getSettings(params: GetSettingsParams) {
-    const { page, limit, storeId } = params;
+    const { page, limit } = params;
     const skip = (page - 1) * limit;
 
-    const where: Prisma.SystemSettingWhereInput = {};
-
-    if (storeId) {
-      where.storeId = storeId;
-    }
+    const where: Prisma.SettingWhereInput = {};
 
     const [settings, total] = await Promise.all([
-      prisma.systemSetting.findMany({
+      prisma.setting.findMany({
         where,
         skip,
         take: limit,
         orderBy: { updatedAt: 'desc' },
-        include: {
-          store: { select: { id: true, name: true } },
-        },
       }),
-      prisma.systemSetting.count({ where }),
+      prisma.setting.count({ where }),
     ]);
 
     return {
@@ -43,31 +35,22 @@ export const settingsService = {
   },
 
   async getSetting(id: string) {
-    return prisma.systemSetting.findUnique({
+    return prisma.setting.findUnique({
       where: { id },
-      include: {
-        store: { select: { id: true, name: true } },
-      },
     });
   },
 
-  async createSetting(data: Prisma.SystemSettingCreateInput) {
-    return prisma.systemSetting.create({
+  async createSetting(data: Prisma.SettingCreateInput) {
+    return prisma.setting.create({
       data,
-      include: {
-        store: { select: { id: true, name: true } },
-      },
     });
   },
 
-  async updateSetting(id: string, data: Prisma.SystemSettingUpdateInput) {
+  async updateSetting(id: string, data: Prisma.SettingUpdateInput) {
     try {
-      return await prisma.systemSetting.update({
+      return await prisma.setting.update({
         where: { id },
         data,
-        include: {
-          store: { select: { id: true, name: true } },
-        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -79,7 +62,7 @@ export const settingsService = {
 
   async deleteSetting(id: string) {
     try {
-      await prisma.systemSetting.delete({ where: { id } });
+      await prisma.setting.delete({ where: { id } });
       return true;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

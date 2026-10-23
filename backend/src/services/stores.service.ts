@@ -29,9 +29,7 @@ export const storesService = {
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          _count: {
-            select: { customers: true },
-          },
+          customer: { select: { id: true, name: true } },
         },
       }),
       prisma.store.count({ where }),
@@ -52,33 +50,27 @@ export const storesService = {
     return prisma.store.findUnique({
       where: { id },
       include: {
-        _count: {
-          select: { customers: true },
-        },
+        customer: { select: { id: true, name: true } },
       },
     });
   },
 
-  async createStore(data: Prisma.StoreCreateInput) {
+  async createStore(data: Prisma.StoreUncheckedCreateInput) {
     return prisma.store.create({
       data,
       include: {
-        _count: {
-          select: { customers: true },
-        },
+        customer: { select: { id: true, name: true } },
       },
     });
   },
 
-  async updateStore(id: string, data: Prisma.StoreUpdateInput) {
+  async updateStore(id: string, data: Prisma.StoreUncheckedUpdateInput) {
     try {
       return await prisma.store.update({
         where: { id },
         data,
         include: {
-          _count: {
-            select: { customers: true },
-          },
+          customer: { select: { id: true, name: true } },
         },
       });
     } catch (error) {

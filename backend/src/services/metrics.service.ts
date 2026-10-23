@@ -14,33 +14,33 @@ export const metricsService = {
     const { page, limit, storeId, startDate, endDate } = params;
     const skip = (page - 1) * limit;
 
-    const where: Prisma.PerformanceMetricWhereInput = {};
+    const where: Prisma.GbpDailyMetricWhereInput = {};
 
     if (storeId) {
       where.storeId = storeId;
     }
 
     if (startDate || endDate) {
-      where.recordedAt = {};
+      where.date = {};
       if (startDate) {
-        where.recordedAt.gte = new Date(startDate);
+        where.date.gte = new Date(startDate);
       }
       if (endDate) {
-        where.recordedAt.lte = new Date(endDate);
+        where.date.lte = new Date(endDate);
       }
     }
 
     const [metrics, total] = await Promise.all([
-      prisma.performanceMetric.findMany({
+      prisma.gbpDailyMetric.findMany({
         where,
         skip,
         take: limit,
-        orderBy: { recordedAt: 'desc' },
+        orderBy: { date: 'desc' },
         include: {
           store: { select: { id: true, name: true } },
         },
       }),
-      prisma.performanceMetric.count({ where }),
+      prisma.gbpDailyMetric.count({ where }),
     ]);
 
     return {
@@ -55,7 +55,7 @@ export const metricsService = {
   },
 
   async getMetric(id: string) {
-    return prisma.performanceMetric.findUnique({
+    return prisma.gbpDailyMetric.findUnique({
       where: { id },
       include: {
         store: { select: { id: true, name: true } },
@@ -63,8 +63,8 @@ export const metricsService = {
     });
   },
 
-  async createMetric(data: Prisma.PerformanceMetricCreateInput) {
-    return prisma.performanceMetric.create({
+  async createMetric(data: Prisma.GbpDailyMetricUncheckedCreateInput) {
+    return prisma.gbpDailyMetric.create({
       data,
       include: {
         store: { select: { id: true, name: true } },
@@ -72,9 +72,9 @@ export const metricsService = {
     });
   },
 
-  async updateMetric(id: string, data: Prisma.PerformanceMetricUpdateInput) {
+  async updateMetric(id: string, data: Prisma.GbpDailyMetricUpdateInput) {
     try {
-      return await prisma.performanceMetric.update({
+      return await prisma.gbpDailyMetric.update({
         where: { id },
         data,
         include: {
@@ -91,7 +91,7 @@ export const metricsService = {
 
   async deleteMetric(id: string) {
     try {
-      await prisma.performanceMetric.delete({ where: { id } });
+      await prisma.gbpDailyMetric.delete({ where: { id } });
       return true;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

@@ -19,7 +19,7 @@ import {
   DialogActions,
 } from '@mui/material'
 import { Add, Edit, Delete, Visibility } from '@mui/icons-material'
-import api from '../utils/api'
+import api from '../api/client'
 
 interface Customer {
   id: string
@@ -46,7 +46,7 @@ export default function CustomerList() {
   const fetchCustomers = async () => {
     try {
       const response = await api.get('/customers')
-      setCustomers(response.data.data || [])
+      setCustomers(response.data.data.data || [])
     } catch (error) {
       console.error('Failed to fetch customers:', error)
     } finally {

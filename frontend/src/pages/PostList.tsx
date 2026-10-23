@@ -15,7 +15,7 @@ import {
   Chip,
 } from '@mui/material'
 import { Add, Edit, Delete } from '@mui/icons-material'
-import api from '../utils/api'
+import api from '../api/client'
 
 interface Post {
   id: string
@@ -41,7 +41,7 @@ export default function PostList() {
   const fetchPosts = async () => {
     try {
       const response = await api.get('/posts')
-      setPosts(response.data.data || [])
+      setPosts(response.data.data.data || [])
     } catch (error) {
       console.error('Failed to fetch posts:', error)
     } finally {

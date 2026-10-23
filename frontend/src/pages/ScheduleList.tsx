@@ -23,7 +23,7 @@ import {
   TextField,
 } from '@mui/material'
 import { Add, Delete, Cancel } from '@mui/icons-material'
-import api from '../utils/api'
+import api from '../api/client'
 
 interface Schedule {
   id: string
@@ -74,9 +74,9 @@ export default function ScheduleList() {
         api.get('/posts'),
         api.get('/stores'),
       ])
-      setSchedules(schedulesRes.data.data || [])
-      setPosts(postsRes.data.data || [])
-      setStores(storesRes.data.data || [])
+      setSchedules(schedulesRes.data.data.data || [])
+      setPosts(postsRes.data.data.data || [])
+      setStores(storesRes.data.data.data || [])
     } catch (error) {
       console.error('Failed to fetch data:', error)
     } finally {
